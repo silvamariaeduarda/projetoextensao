@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segunda página</title>
+    <link rel="stylesheet" href="style.css">
+
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Consumo sustentável de livros</h1>
+    </header>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="contato.html">Contato</a>
+    </nav>
+
+    <main>
+        <h1>Mapa de Londrina - PR</h1>
+        <p>Observe o mapa para saber onde fica a Biblioteca Municipal de Londrina e todos os sebos da cidade.</p>
+        <div id="map"></div>
+        
+        <!-- Script do Leaflet -->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+
+        <script>
+            // Inicializa o mapa em Londrina
+            var mapa = L.map('map').setView([-23.31028000, -51.16278000], 13);
+
+            // Adiciona o mapa base
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution:
+                '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            }).addTo(mapa);
+
+            // Lista de endereços com coordenadas
+            var enderecos = [
+            {
+                nome: 'Rua Mato Grosso, 211',
+                coords: [-23.3176330, -51.1563961],
+            },
+            {
+                nome: 'Rua Paraíba, 205',
+                coords: [-23.3066096, -51.1654392],
+            },
+            {
+                nome: 'Rua Sergipe, 1156',
+                coords: [-23.3098499, -51.1628366],
+            },
+            {
+                nome: 'Rua Gomes Carneiro, 35',
+                coords: [-23.3217810, -51.1650345],
+            },
+            {
+                nome: 'Rua Prefeito Antônio Fernandes Sobrinho, 50',
+                coords: [-23.3130418, -51.1609719],
+            },
+            {
+                nome: 'Avenida Rio de Janeiro, 413',
+                coords: [-23.3165530, -51.1589306],
+            },
+            ];
+
+            // Adiciona os marcadores ao mapa
+            enderecos.forEach(function (endereco) {
+            L.marker(endereco.coords)
+                .addTo(mapa)
+                .bindPopup(endereco.nome);
+            });
+        </script>
+
+        <h1>Endereços</h1>
+        <h2>Sebos</h2>
+        <p>Sebo Capricho - Loja I, R. Mato Grosso, 211 - Centro, Londrina - PR, 86010-180</p>
+        <p>Sebo Capricho - Loja II, R. Pref. Antônio Fernandes Sobrinho, 50 - Centro, Londrina - PR, 86010-080</p>
+        <p>Nosso Sebo, R. Paraíba, 205 - Jardim Higienopolis, Londrina - PR, 86020-090</p>
+        <p>Sebo Lideranca Londrina, R. Sergipe, 1156 - Centro, Londrina - PR, 86020-330</p>
+        <p>Livraria Sebo Sol Nascente, R. Gomes Carneiro, 35 - Boa Vista, Londrina - PR, 86015-240</p>
+
+        <h2>Biblioteca pública municipal</h2>
+        <p>Av. Rio de Janeiro, 413 - Centro, Londrina - PR, 86010-150</p>
+
+        <a href="principal.html">Voltar</a>
+    </main>
+
+    <footer class="rodape">
+        Site criado por Maria Eduarda da Silva para o projeto de extensão I 
+    </footer>  
+</body>
+</html>
