@@ -15,7 +15,7 @@ class Local {
     }
 
     gerarHTML() {
-        let html = `<h3>${this.nome}</h3>`;
+        let html = `<h2>${this.nome}</h2>`;
         html += `<p><strong>Endereço:</strong> ${this.endereco}</p>`;
         html += `<p><strong>Telefone:</strong> ${this.telefone}</p>`;
         if (this.site) html += `<p><strong>Site:</strong> <a href="${this.site}" target="_blank">${this.site}</a></p>`;
