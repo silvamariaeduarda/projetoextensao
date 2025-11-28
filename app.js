@@ -1,3 +1,17 @@
+// ----------------------------
+// SISTEMA DE FAVORITOS
+// ----------------------------
+
+// Carrega favoritos do navegador
+let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+
+// Pega o container onde tudo será mostrado
+let container = document.getElementById("info-locais");
+
+
+// ----------------------------
+// CLASSE LOCAL
+// ----------------------------
 class Local {
     constructor(nome, endereco, telefone, site = null) {
         this.nome = nome;
@@ -6,71 +20,104 @@ class Local {
         this.site = site;
     }
 
-    exibirInformacoes() {
-        console.log(`Nome: ${this.nome}`);
-        console.log(`Endereço: ${this.endereco}`);
-        console.log(`Telefone: ${this.telefone}`);
-        if (this.site) console.log(`Site: ${this.site}`);
-        console.log('-----------------------------');
-    }
-
     gerarHTML() {
-        let html = `<h2>${this.nome}</h2>`;
+        // Verifica se já está favoritado
+        let isFavorito = favoritos.includes(this.nome);
+
+        let html = `<div class="local-box">`;
+
+        html += `<h2>${this.nome}</h2>`;
         html += `<p><strong>Endereço:</strong> ${this.endereco}</p>`;
         html += `<p><strong>Telefone:</strong> ${this.telefone}</p>`;
-        if (this.site) html += `<p><strong>Site:</strong> <a href="${this.site}" target="_blank">${this.site}</a></p>`;
-        html += `<hr>`;
+
+        if (this.site)
+            html += `<p><strong>Site:</strong> <a href="${this.site}" target="_blank">${this.site}</a></p>`;
+
+        // Botão de favoritar
+        html += `
+            <button class="btn-favorito" onclick="toggleFavorito('${this.nome}')">
+                ${isFavorito ? "★ Favorito" : "☆ Favoritar"}
+            </button>
+        `;
+
+        html += `<hr></div>`;
         return html;
     }
 }
 
-class Biblioteca extends Local {}
-class Sebo extends Local {}
+
+// ----------------------------
+// LISTA DE LOCAIS
+// ----------------------------
+let locais = [
+    new Local(
+        "Biblioteca Municipal de Londrina",
+        "Av. Rio de Janeiro, 413 - Centro, Londrina - PR",
+        "(43) 3371-6500"
+    ),
+
+    new Local(
+        "Sebo Capricho",
+        "Rua Mato Grosso, 211 - Centro, Londrina - PR",
+        "(43) 3324-9460",
+        "https://www.sebocapricho.com.br"
+    ),
+
+    new Local(
+        "Sebo Capricho II",
+        "R. Pref. Antônio Fernandes Sobrinho, 50 - Centro, Londrina - PR",
+        "(43) 3028-8581",
+        "https://www.sebocapricho.com.br"
+    ),
+
+    new Local(
+        "Sebo Nosso Sebo",
+        "Rua Paraíba, 205 - Jardim Higienópolis, Londrina - PR",
+        "(43) 3293-0509"
+    ),
+
+    new Local(
+        "Sebo Liderança",
+        "Rua Sergipe, 1156 - Centro, Londrina - PR",
+        "(43) 3037-2022"
+    ),
+
+    new Local(
+        "Sebo Sol Nascente",
+        "Rua Gomes Carneiro, 35 - Boa Vista, Londrina - PR",
+        "(43) 3025-5354"
+    )
+];
 
 
-const bibLondrina = new Biblioteca(
-    "Biblioteca Municipal de Londrina",
-    "Av. Rio de Janeiro, 413 - Centro, Londrina - PR",
-    "(43) 3371-6500"
-);
+// ----------------------------
+// FUNÇÃO FAVORITAR / DESFAVORITAR
+// ----------------------------
+function toggleFavorito(nomeLocal) {
+    if (favoritos.includes(nomeLocal)) {
+        favoritos = favoritos.filter(item => item !== nomeLocal);
+    } else {
+        favoritos.push(nomeLocal);
+    }
 
-const seboCapricho = new Sebo(
-    "Sebo Capricho",
-    "R. Mato Grosso, 211 - Centro, Londrina - PR",
-    "(43) 3324-9460",
-    "https://www.sebocapricho.com.br"
-);
+    // Atualiza localStorage
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
 
-const seboCapri = new Sebo(
-    "Sebo Capricho II",
-    "R. Pref. Antônio Fernandes Sobrinho, 50 - Centro, Londrina - PR",
-    "(43) 3028-8581",
-    "https://www.sebocapricho.com.br"
-);
-
-const seboNosso = new Sebo(
-    "Sebo Nosso Sebo",
-    "R. Paraíba, 205 - Jardim Higienopolis, Londrina - PR",
-    "(43) 3293-0509"
-);
-
-const seboLideranca = new Sebo(
-    "Sebo Liderança",
-    "R. Sergipe, 1156 - Centro, Londrina - PR",
-    "(43) 3037-2022"
-);
-
-const seboSolNascente = new Sebo(
-    "Sebo Sol Nascente",
-    "R. Gomes Carneiro, 35 - Boa Vista, Londrina - PR",
-    "(43) 3025-5354"
-);
+    // Re-renderiza a lista
+    atualizarLista();
+}
 
 
-const locais = [bibLondrina, seboCapricho, seboCapri, seboNosso, seboLideranca, seboSolNascente];
+// ----------------------------
+// RENDERIZAR TUDO NA TELA
+// ----------------------------
+function atualizarLista() {
+    container.innerHTML = "";
+    locais.forEach(local => {
+        container.innerHTML += local.gerarHTML();
+    });
+}
 
 
-const container = document.getElementById("info-locais");
-locais.forEach(local => {
-    container.innerHTML += local.gerarHTML();
-});
+// Chamada inicial
+atualizarLista();

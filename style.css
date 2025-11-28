@@ -180,3 +180,19 @@ footer a {
     font-weight: bold;
     text-decoration: none;
 }
+
+
+.btn-favorito {
+    background-color: var(--cor6);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: 0.3s;
+}
+
+.btn-favorito:hover {
+    background-color: var(--cor0);
+}
