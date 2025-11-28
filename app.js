@@ -1,6 +1,68 @@
-let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-
+let db;
+let favoritos = []; 
 let container = document.getElementById("info-locais");
+
+
+function abrirBanco() {
+    return new Promise((resolve, reject) => {
+        let request = indexedDB.open("FavoritosDB", 1);
+
+    
+        request.onupgradeneeded = function (event) {
+            let db = event.target.result;
+
+            if (!db.objectStoreNames.contains("favoritos")) {
+                db.createObjectStore("favoritos", { keyPath: "nome" });
+            }
+        };
+
+        request.onsuccess = function (event) {
+            db = event.target.result;
+            resolve();
+        };
+
+        request.onerror = function () {
+            reject("Erro ao abrir IndexedDB");
+        };
+    });
+}
+
+
+
+function carregarFavoritos() {
+    return new Promise((resolve, reject) => {
+        let transaction = db.transaction("favoritos", "readonly");
+        let store = transaction.objectStore("favoritos");
+        let request = store.getAll();
+
+        request.onsuccess = function () {
+            favoritos = request.result.map(item => item.nome);
+            resolve();
+        };
+
+        request.onerror = function () {
+            reject("Erro ao carregar favoritos");
+        };
+    });
+}
+
+
+
+function salvarFavorito(nome) {
+    let transaction = db.transaction("favoritos", "readwrite");
+    let store = transaction.objectStore("favoritos");
+
+    store.put({ nome: nome });
+}
+
+
+
+function removerFavorito(nome) {
+    let transaction = db.transaction("favoritos", "readwrite");
+    let store = transaction.objectStore("favoritos");
+
+    store.delete(nome);
+}
 
 
 
@@ -23,9 +85,6 @@ class Local {
 
         if (this.site)
             html += `<p><strong>Site:</strong> <a href="${this.site}" target="_blank">${this.site}</a></p>`;
-
-      
-
 
         html += `
             <button class="btn-favorito" onclick="toggleFavorito('${this.nome}')">
@@ -84,15 +143,13 @@ let locais = [
 
 function toggleFavorito(nomeLocal) {
     if (favoritos.includes(nomeLocal)) {
-        favoritos = favoritos.filter(item => item !== nomeLocal);
+        favoritos = favoritos.filter(f => f !== nomeLocal);
+        removerFavorito(nomeLocal);
     } else {
         favoritos.push(nomeLocal);
+        salvarFavorito(nomeLocal);
     }
 
-    
-
-    localStorage.setItem("favoritos", JSON.stringify(favoritos));
-    
     atualizarLista();
 }
 
@@ -106,5 +163,11 @@ function atualizarLista() {
 }
 
 
-// Chamada inicial
-atualizarLista();
+
+async function iniciar() {
+    await abrirBanco();
+    await carregarFavoritos();
+    atualizarLista();
+}
+
+iniciar();
