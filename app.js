@@ -1,17 +1,9 @@
-// ----------------------------
-// SISTEMA DE FAVORITOS
-// ----------------------------
-
-// Carrega favoritos do navegador
 let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
-// Pega o container onde tudo será mostrado
 let container = document.getElementById("info-locais");
 
 
-// ----------------------------
-// CLASSE LOCAL
-// ----------------------------
+
 class Local {
     constructor(nome, endereco, telefone, site = null) {
         this.nome = nome;
@@ -21,7 +13,6 @@ class Local {
     }
 
     gerarHTML() {
-        // Verifica se já está favoritado
         let isFavorito = favoritos.includes(this.nome);
 
         let html = `<div class="local-box">`;
@@ -33,7 +24,9 @@ class Local {
         if (this.site)
             html += `<p><strong>Site:</strong> <a href="${this.site}" target="_blank">${this.site}</a></p>`;
 
-        // Botão de favoritar
+      
+
+
         html += `
             <button class="btn-favorito" onclick="toggleFavorito('${this.nome}')">
                 ${isFavorito ? "★ Favorito" : "☆ Favoritar"}
@@ -46,9 +39,7 @@ class Local {
 }
 
 
-// ----------------------------
-// LISTA DE LOCAIS
-// ----------------------------
+
 let locais = [
     new Local(
         "Biblioteca Municipal de Londrina",
@@ -90,9 +81,7 @@ let locais = [
 ];
 
 
-// ----------------------------
-// FUNÇÃO FAVORITAR / DESFAVORITAR
-// ----------------------------
+
 function toggleFavorito(nomeLocal) {
     if (favoritos.includes(nomeLocal)) {
         favoritos = favoritos.filter(item => item !== nomeLocal);
@@ -100,17 +89,15 @@ function toggleFavorito(nomeLocal) {
         favoritos.push(nomeLocal);
     }
 
-    // Atualiza localStorage
-    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    
 
-    // Re-renderiza a lista
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    
     atualizarLista();
 }
 
 
-// ----------------------------
-// RENDERIZAR TUDO NA TELA
-// ----------------------------
+
 function atualizarLista() {
     container.innerHTML = "";
     locais.forEach(local => {
