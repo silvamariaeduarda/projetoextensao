@@ -1,11 +1,7 @@
 let favoritos = [];
 let container;
-let usarAPI = true; // tenta usar API primeiro
+let usarAPI = true;
 
-
-// =====================
-// 🔍 DETECTAR API
-// =====================
 
 async function carregarFavoritos() {
     if (usarAPI) {
@@ -22,14 +18,10 @@ async function carregarFavoritos() {
         }
     }
 
-    // fallback localStorage
+    
     favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 }
 
-
-// =====================
-// 💾 SALVAR
-// =====================
 
 async function salvarFavorito(nome) {
     if (usarAPI) {
@@ -47,17 +39,13 @@ async function salvarFavorito(nome) {
         }
     }
 
-    // fallback localStorage
+    
     if (!favoritos.includes(nome)) {
         favoritos.push(nome);
         localStorage.setItem("favoritos", JSON.stringify(favoritos));
     }
 }
 
-
-// =====================
-// ❌ REMOVER
-// =====================
 
 async function removerFavorito(nome) {
     if (usarAPI) {
@@ -71,15 +59,12 @@ async function removerFavorito(nome) {
         }
     }
 
-    // fallback localStorage
+    
     favoritos = favoritos.filter(f => f !== nome);
     localStorage.setItem("favoritos", JSON.stringify(favoritos));
 }
 
 
-// =====================
-// 📦 Classe Local
-// =====================
 
 class Local {
     constructor(nome, endereco, telefone, site = null) {
@@ -113,10 +98,6 @@ class Local {
     }
 }
 
-
-// =====================
-// 📍 Lista de locais
-// =====================
 
 let locais = [
     new Local(
@@ -154,10 +135,6 @@ let locais = [
 ];
 
 
-// =====================
-// ⭐ TOGGLE
-// =====================
-
 async function toggleFavorito(nomeLocal) {
     if (favoritos.includes(nomeLocal)) {
         await removerFavorito(nomeLocal);
@@ -170,10 +147,6 @@ async function toggleFavorito(nomeLocal) {
 }
 
 
-// =====================
-// 🔄 UI
-// =====================
-
 function atualizarLista() {
     container.innerHTML = "";
 
@@ -183,9 +156,6 @@ function atualizarLista() {
 }
 
 
-// =====================
-// 🚀 INIT
-// =====================
 
 async function iniciar() {
     container = document.getElementById("info-locais");

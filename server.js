@@ -6,13 +6,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Servir seus arquivos HTML/CSS/JS
+
 app.use(express.static(__dirname));
 
-// "Banco" simples
+
 let favoritos = [];
 
-// ROTAS API
+
 app.get("/favoritos", (req, res) => {
     res.json(favoritos);
 });
@@ -33,7 +33,7 @@ app.delete("/favoritos/:nome", (req, res) => {
     res.json({ sucesso: true });
 });
 
-// Iniciar servidor
+
 app.listen(3000, () => {
     console.log("Rodando em http://localhost:3000");
 });
